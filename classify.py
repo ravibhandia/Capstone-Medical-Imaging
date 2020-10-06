@@ -23,6 +23,21 @@ import requests
 import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
+
+
+def preprocess_image(image1):
+    image = load_img(image1, target_size=(224, 224))
+    mean = 66.39297
+    std = 49.230354
+    # convert the image pixels to a numpy array
+    image = img_to_array(image)
+    float_image = image.astype('float32')
+    float_image[:, :, :] = (float_image[:, :, :] - mean) / std
+
+    # reshape data for the model
+    array = np.reshape(float_image, newshape=(1, 224, 224, 3))
+    return array
+
 def build_model(n_classes):
     base_model = DenseNet169(input_shape=(224,224,3),
                              weights='imagenet',
@@ -36,20 +51,14 @@ def build_model(n_classes):
     model.load_weights('weights/densenet_mura_rs_v3_xr_shoulder.h5')
     model.summary()
     return model
-def predict(image1,n_classes):
+
+def predict(image1,n_classes=1):
     model = build_model(n_classes)
+    print(type(image1))
+    print(image1)
     for ilayer, layer in enumerate(model.layers):
         print("{:3.0f} {:10}".format(ilayer, layer.name))
-    image = load_img(image1,target_size=(224,224))
-    mean=66.39297
-    std=49.230354
-    # convert the image pixels to a numpy array
-    image = img_to_array(image)
-    float_image=image.astype('float32')
-    float_image[:, :, :] = (float_image[:, :, :] - mean) / std
-
-    # reshape data for the model
-    image = np.reshape(float_image,newshape=(1,224,224,3))
+    image=preprocess_image(image1)
     print(image.shape)
     # prepare the image for the VGG model
     # predict the probability across all output classes
@@ -64,13 +73,11 @@ def predict(image1,n_classes):
     return yhat
 
 
-last_conv_layer_name='relu'
+last_conv_layer_name='conv5_block32_concat'
 last_classifier_name=['avg_pool','dense_1']
 
-def make_gradcam_heatmap(
-        #https://keras.io/examples/vision/grad_cam/
-    img_array, model, last_conv_layer_name, classifier_layer_names
-):
+def make_gradcam_heatmap(img_array, model, last_conv_layer_name, classifier_layer_names):
+    # https://keras.io/examples/vision/grad_cam/
     # First, we create a model that maps the input image to the activations
     # of the last conv layer
     last_conv_layer = model.get_layer(last_conv_layer_name)
@@ -116,6 +123,10 @@ def make_gradcam_heatmap(
 
     # For visualization purpose, we will also normalize the heatmap between 0 & 1
     heatmap = np.maximum(heatmap, 0) / np.max(heatmap)
+    print('shape of heatmap: ',heatmap.shape)
+    print('heatmap content: ', heatmap)
+
+
     return heatmap
 
 
@@ -123,19 +134,10 @@ def predict_heatmap(image1,n_classes):
     prediction=predict(image1,n_classes)
     model = build_model(n_classes)
 
-    image = load_img(image1, target_size=(224, 224))
-    mean = 66.39297
-    std = 49.230354
-    # convert the image pixels to a numpy array
-    image = img_to_array(image)
-    float_image = image.astype('float32')
-    float_image[:, :, :] = (float_image[:, :, :] - mean) / std
-
-    print('float_image_shape: ',float_image.shape)
-    float_image=np.expand_dims(float_image, axis=0)
-    #heatmap=make_gradcam_heatmap(classifier_layer_names=last_classifier_name,last_conv_layer_name=last_conv_layer_name,img_array=float_image,model=model)
-    heatmap,image=CAM(model,float_image,last_conv_layer_name,last_classifier_name[1])
-    return (prediction,heatmap,image)
+    float_image=preprocess_image(image1)
+    heatmap=make_gradcam_heatmap(classifier_layer_names=last_classifier_name,last_conv_layer_name=last_conv_layer_name,img_array=float_image,model=model)
+    #heatmap,image=CAM(model,float_image,last_conv_layer_name,last_classifier_name[1])
+    return (prediction,heatmap,float_image)
 
 def CAM(mdl, valid_img,conv_layer,last_classifier_layer):
   act_layer = mdl.get_layer(conv_layer)
