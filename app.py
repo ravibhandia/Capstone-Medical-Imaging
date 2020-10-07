@@ -1,34 +1,14 @@
 
-from keras.preprocessing.image import img_to_array
 from keras.applications.densenet import DenseNet169, DenseNet121, preprocess_input,decode_predictions
-from keras.preprocessing.image import ImageDataGenerator, load_img
 from keras.models import Sequential, Model, load_model
-from keras.layers import Conv2D, MaxPool2D
 from keras.layers import Activation, Dropout, Flatten, Dense
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint, Callback
-from keras import regularizers
-import pandas as pd
-from tqdm import tqdm
-import os
-import scipy as sp
-import keras
-import numpy as np
-import tensorflow as tf
-import random
-from keras.optimizers import Adam
-import keras.backend as K
-import cv2
-import matplotlib.pyplot as plt
-import requests
-import ssl
+
 from flask import Flask, render_template, request
 import flask
-from werkzeug.utils import secure_filename
 from inference import prediction,prepare_image,predict_bodypart
-import cv2
 from PIL import Image
 import io
-import numpy as np
+import os
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
@@ -71,8 +51,6 @@ def predict():
             data['predictions']=[]
             data['predictions'].append({'body_part':body_part,'yhat_body':yhat_body,'label':label,'yhat':yhat})
             data['success']=True
-    print(data)
-    print('predictions: ', data['predictions'])
     return render_template('result.html', body_part=data['predictions'][0]['body_part'], label=data['predictions'][0]['label'],yhat=data['predictions'][0]['yhat'])
 
 '''@app.route('/', methods=['GET','POST'])
@@ -101,6 +79,9 @@ def home():
 
 if __name__ == '__main__':
     list_of_bodyparts=['ELBOW','FINGER','FOREARM','HAND','HUMERUS','SHOULDER','WRIST']
+
+    path = os.getcwd()
+    print('PATH:',path)
     global model_dict
     model_dict={}
 
@@ -109,4 +90,4 @@ if __name__ == '__main__':
     global body_part_model
     body_part_model =build_model(7,'densenet','bodypart')
 
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')

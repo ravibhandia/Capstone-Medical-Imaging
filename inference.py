@@ -1,24 +1,5 @@
 from keras.preprocessing.image import img_to_array
-from keras.applications.densenet import DenseNet169, DenseNet121, preprocess_input,decode_predictions
-from keras.preprocessing.image import ImageDataGenerator, load_img
-from keras.models import Sequential, Model, load_model
-from keras.layers import Conv2D, MaxPool2D
-from keras.layers import Activation, Dropout, Flatten, Dense
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint, Callback
-from keras import regularizers
-import pandas as pd
-from tqdm import tqdm
-import os
-import scipy as sp
-import keras
 import numpy as np
-import tensorflow as tf
-import random
-from keras.optimizers import Adam
-import keras.backend as K
-import cv2
-import matplotlib.pyplot as plt
-import requests
 import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
