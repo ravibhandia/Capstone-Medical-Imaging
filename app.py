@@ -10,7 +10,6 @@ from PIL import Image
 import io
 import os
 app = Flask(__name__)
-
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -78,10 +77,8 @@ def home():
 
 
 if __name__ == '__main__':
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #to suppress GPU messages
     list_of_bodyparts=['ELBOW','FINGER','FOREARM','HAND','HUMERUS','SHOULDER','WRIST']
-
-    path = os.getcwd()
-    print('PATH:',path)
     global model_dict
     model_dict={}
 
@@ -90,4 +87,4 @@ if __name__ == '__main__':
     global body_part_model
     body_part_model =build_model(7,'densenet','bodypart')
 
-    app.run(debug=True,host='0.0.0.0')
+    app.run(host='0.0.0.0', port=80)
