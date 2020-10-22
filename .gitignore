@@ -2,6 +2,6 @@
 venv
 pycache
 .DS_Store
-_pycache_
+__pycache__
 .hdf5
 .idea/
