@@ -1,7 +1,7 @@
 # Folders
 venv
 pycache
-.DS_Store
+*.DS_Store
 __pycache__
 .hdf5
 .idea/
