@@ -4,3 +4,4 @@ pycache
 .DS_Store
 _pycache_
 .hdf5
+.idea/
