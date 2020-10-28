@@ -30,7 +30,7 @@ All the training of the models was done on Google Colab Pro for GPU access and s
 
 ## 3. Performance
 
-Example Metrics for DenseNet 169 Layer Performance on Validation Set
+Example Metrics for DenseNet 169 Layer Performance on Validation Set of the Wrist
 
 Confusion Matrix
 
