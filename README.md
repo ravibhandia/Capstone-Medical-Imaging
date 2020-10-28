@@ -52,6 +52,8 @@ Classification Report
     macro avg       0.82      0.79      0.80       659
     weighted avg       0.82      0.81      0.80       659
 
+AUC and ROC Curve:
+![ROC Curve](/static/AUC_ROC_Curve.png "ROC Curve")
 
 ## 4. Deployment
 
