@@ -107,4 +107,10 @@ and then push your docker container
 Once my docker image was on docker hub. I then used the URL that points to my image on docker hub: docker.io/username/x-ray and then used it to host on AWS Elastic Container Service. You can repeat the instruction using this [article](https://reflectoring.io/aws-deploy-docker-image-via-web-console/).
 
 This X-Ray abnormality detector can then be acessed from the browser with the url specified by AWS ECS.
-    
+
+## Acknowledgements and Resources Used
+
+1. AWS ECS Deployment Guide from Reflectoring.io https://reflectoring.io/aws-deploy-docker-image-via-web-console/
+2. Grad-CAM example with keras https://keras.io/examples/vision/grad_cam/
+3. Streamlit upload feature https://towardsdatascience.com/image-classification-of-uploaded-files-using-streamlits-killer-new-feature-7dd6aa35fe0
+4. MURA Dataset at Stanford Machine Learning Group https://stanfordmlgroup.github.io/competitions/mura/
