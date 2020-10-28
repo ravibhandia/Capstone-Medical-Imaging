@@ -5,13 +5,13 @@ The purpose of this project is to create a webapp that can classify X-Ray images
 The data used in this project  and the idea of building abnormality detectors for muscoskeletal radiographs came from [Rajpurkar et al.](https://arxiv.org/abs/1712.06957)
 You can retrieve the dataset by going to the competition leaderboard and requesting it [here.](https://stanfordmlgroup.github.io/competitions/mura/)
 
-All training of the 7 body part models and the body detector model can be found in the folder /Notebooks. Additionally an attempt was also made to try and build a generalized body_part anomaly detector model that would be fed all the data with only abnormality labels to see how it would perform.
+All training of the 7 body part models and the body detector model can be found in the folder [/Notebooks](https://github.com/ravibhandia/Capstone-Medical-Imaging/tree/master/Notebooks). Additionally an attempt was also made to try and build a generalized body_part anomaly detector model that would be fed all the data with only abnormality labels to see how it would perform.
 
 ## 1. Loading and preprocessing of data
 
 The image data came in .jpg files. Metadata .csv files were used to create Pandas dataframes that included the image paths, patient no, study no, and the label of abnormality. The dataset contains ~36000 images in the training set and 3197 images in the validation set.
 
-An initial Data Exploration including the count of the number of images by body_part can be found in [Data Exploration.ipynb]()
+An initial Data Exploration including the count of the number of images by body_part can be found in [Data Exploration.ipynb](https://github.com/ravibhandia/Capstone-Medical-Imaging/blob/master/Notebooks/Data%20Exploration.ipynb)
 
 Using the information in the metadataframes provided, new dataframes were formed that contained the labels, image paths, and body part information. A separate notebook
 
@@ -24,7 +24,7 @@ One bug I found while dealing with preprocessing in deployment is that load_img 
 
 Lots of data modeling experimentation was done as can be see in each of the notebooks to see how to best build initially a model that had the capability to overfit and later on a model that could generalize over the distribution. Eventually, Densenet (as suggested by Rajpurkar's paper) and Efficientnet B0 were used.
 
-Grad-cam was only implemented for DenseNet and in the streamlit implementation files which can be seen in main.py and classify.py.
+Grad-cam was only implemented for DenseNet and in the streamlit implementation files which can be seen in [main.py](https://github.com/ravibhandia/Capstone-Medical-Imaging/blob/master/main.py) and [classify.py](https://github.com/ravibhandia/Capstone-Medical-Imaging/blob/master/classify.py).
 
 All the training of the models was done on Google Colab Pro for GPU access and storage of the data.
 
