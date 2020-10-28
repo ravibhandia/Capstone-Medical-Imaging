@@ -1,4 +1,4 @@
-#Rad_X
+# Muscoskeletal X-Ray Abnormality Classifier with Grad-CAM
 
 The purpose of this project is to create a webapp that can classify X-Ray images as abnormal with a high rate of specificity and sensitivity. And to provide a level of interpretability that is currently possible with convolutional neural networks, using gradient classification activation maps (Grad- CAM) by superimposing a heatmap ontop of the original image.
 
