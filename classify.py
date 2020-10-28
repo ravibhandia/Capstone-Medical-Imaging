@@ -133,36 +133,6 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, classifier_laye
 def predict_heatmap(image1,n_classes):
     prediction=predict(image1,n_classes)
     model = build_model(n_classes)
-
     float_image=preprocess_image(image1)
     heatmap=make_gradcam_heatmap(classifier_layer_names=last_classifier_name,last_conv_layer_name=last_conv_layer_name,img_array=float_image,model=model)
-    #heatmap,image=CAM(model,float_image,last_conv_layer_name,last_classifier_name[1])
     return (prediction,heatmap,float_image)
-
-def CAM(mdl, valid_img,conv_layer,last_classifier_layer):
-  act_layer = mdl.get_layer(conv_layer)
-  model_nt = Model(inputs=mdl.input, outputs=act_layer.output)
-  final_dense = mdl.get_layer(last_classifier_layer)
-  fW = final_dense.get_weights()[0]
-  print('valid_img shape: ',valid_img.shape)
-  fmaps = model_nt.predict(valid_img)
-  print('fmaps shape: ', fmaps.shape)
-  print('fw shape: ', fW.shape)
-  fmaps=np.squeeze(fmaps,axis=0)
-  cam = fmaps.dot(fW)
-  print('cam shape: ', cam.shape)
-  print(cam)
-  #cam = np.squeeze(cam,axis=0)
-  cam = sp.ndimage.zoom(cam, (32,32,1), order=1)
-  float_img=np.squeeze(valid_img,axis=0)
-  image = cv2.cvtColor(float_img, cv2.COLOR_BGR2GRAY)
-  fig= plt.figure(figsize=(10,10))
-  image = cv2.resize(image, (224,224))
-  return cam,image
-  #plt.imshow(image, alpha=0.8);
-  #plt.imshow(cam, cmap='jet', alpha=0.2)
-  #plt.axis('off')
-  #plt.show()
-#model=build_model(1)
-#img=cv2.imread('Data.nosync/train/XR_SHOULDER/patient00001/image1.png')
-#print(img.shape)

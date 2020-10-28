@@ -12,6 +12,7 @@ from keras.preprocessing.image import array_to_img,img_to_array
 st.title('X-Ray Classifier')
 st.set_option('deprecation.showfileUploaderEncoding', False)
 uploaded_file = st.file_uploader("Choose an image...", type="png")
+print('uploaded file type',type(uploaded_file))
 if uploaded_file is not None:
     image=Image.open(uploaded_file)
     st.image(image, caption='Uploaded Image.', use_column_width=True)
@@ -20,8 +21,6 @@ if uploaded_file is not None:
     label,heatmap,image = predict_heatmap(uploaded_file,1)
 
     st.write(float(label[0][0]*100))
-    #plt.imshow(image.reshape((224,224,3)), alpha=0.7);
-    #plt.imshow(heatmap, cmap='jet', alpha=1)
     image=image.reshape((224,224,3))
     heatmap = np.uint8(255 * heatmap)
     jet = cm.get_cmap("jet")

@@ -5,7 +5,7 @@ from keras.layers import Activation, Dropout, Flatten, Dense
 
 from flask import Flask, render_template, request
 import flask
-from inference import prediction,prepare_image,predict_bodypart
+from inference import prediction,prepare_image,predict_bodypart,return_grad_CAM_heatmap
 from PIL import Image
 import io
 import os
@@ -20,8 +20,9 @@ def build_model(n_classes,model_type,body_part):
     model.add(DenseNet169(include_top=False, weights='imagenet', input_shape=(224, 224, 3), pooling='avg'))
     model.add(Flatten())
     model.add(Dense(n_classes, activation='sigmoid'))
-    model.load_weights('weights/best_'+model_type+'_'+body_part.lower()+'_classifier_weights.best.hdf5')
+    model.load_weights('weights/best_' + model_type + '_' + body_part.lower() + '_classifier_weights.best.hdf5')
     return model
+
 
 @app.route('/',methods=['GET','POST'])
 def predict():
@@ -45,35 +46,15 @@ def predict():
             #2. Predict Abnormality
             label,yhat=prediction(image,model_dict[body_part])
 
+            #3 Get GradCAM Heatmap
+            # For densenet 592 is the last conv_layer, 595 and 596 is the last pooling layer and the last dense layer respectively.
 
+            #heatmap=make_gradcam_heatmap(image,model_dict[body_part],model_dict[body_part].get_layer(index=0).get_layer(index=592),[model_dict[body_part].get_layer(index=0).get_layer(index=595),model_dict[body_part].get_layer(index=2)])
 
             data['predictions']=[]
             data['predictions'].append({'body_part':body_part,'yhat_body':yhat_body,'label':label,'yhat':yhat})
             data['success']=True
     return render_template('result.html', body_part=data['predictions'][0]['body_part'], label=data['predictions'][0]['label'],yhat=data['predictions'][0]['yhat'])
-
-'''@app.route('/', methods=['GET','POST'])
-def home():
-    if request.method =='GET':
-
-
-
-        #return render_template('index.html',value='hi')
-
-    else:
-        print(request.files)
-        if 'file' in request.files:
-            # read the image in PIL format
-            image = flask.request.files["file"].read()
-            image = Image.open(io.BytesIO(image))
-            image=prepare_image(image)
-            body_part=predict_bodypart(image,body_part_model)
-
-            label=predict(image,model_dict[body_part])
-
-
-           #return render_template('result.html', label=label)
-'''
 
 
 if __name__ == '__main__':

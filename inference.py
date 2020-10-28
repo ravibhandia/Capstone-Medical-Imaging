@@ -1,6 +1,9 @@
 from keras.preprocessing.image import img_to_array
 import numpy as np
 import ssl
+import keras
+import tensorflow as tf
+from eli5.keras import explain_prediction
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -28,3 +31,6 @@ def predict_bodypart(image1,model):
     class_map=['ELBOW','FINGER','FOREARM','HAND','HUMERUS','SHOULDER','WRIST']
 
     return class_map[class_idx],max(yhat)
+
+def return_grad_CAM_heatmap(model,img_array):
+    explain_prediction(model,img_array)
